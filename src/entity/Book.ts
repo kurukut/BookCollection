@@ -1,19 +1,18 @@
-import {Entity, PrimaryGeneratedColumn, Column, OneToMany} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, JoinTable, ManyToMany} from "typeorm";
+import { ContentInterface } from "../functionalinterfaces/ContentInterface";
+
 import {Author} from "./Author";
 
 @Entity()
-export class Book {
-
-    @PrimaryGeneratedColumn()
-    bookId: number;
+export class Book extends ContentInterface {
 
     @Column()
-    bookName: string;
+    bookCopies: number;
 
-    @Column()
-    bookCopies: string;
-
-    @OneToMany(() => Author, author => author.book)
+    @ManyToMany(type => Author, author => author.books, {
+        cascade: true
+    })
+    @JoinTable()
     bookAuthors: Author[];
 
 }

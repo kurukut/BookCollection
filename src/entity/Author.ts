@@ -1,17 +1,19 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from "typeorm";
-import {Book} from "./Book";
+import { type } from "os";
+import {Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinTable, ManyToMany} from "typeorm";
+import { Contact } from "../dao/Contact";
+
+import { PersonInterface } from "../functionalinterfaces/PersonInterface";
+import { Book } from "./Book";
+
 
 @Entity()
-export class Author {
+export class Author extends PersonInterface  {
 
-    @PrimaryGeneratedColumn()
-    authorId: number;
-
-    @Column()
-    authorName: string;
-
-    @ManyToOne(() => Book, book => book.bookAuthors)
-    book: Book;
-
+    // @ManyToMany(type => Book, book => book.bookAuthors, {
+    //     cascade: true
+    // })
+    @ManyToMany(type => Book, book => book.bookAuthors)
+    @JoinTable()
+    books: Book[];
     
 }

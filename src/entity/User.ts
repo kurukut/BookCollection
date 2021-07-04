@@ -1,18 +1,17 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+
+import {Entity, Column} from "typeorm";
+
+import { PersonInterface } from "../functionalinterfaces/PersonInterface";
+import { accessRole } from "../roles/accessRole";
+
 
 @Entity()
-export class User {
+export class User extends PersonInterface {
 
-    @PrimaryGeneratedColumn()
-    id: number;
-
-    @Column()
-    firstName: string;
-
-    @Column()
-    lastName: string;
-
-    @Column()
-    age: number;
-
+    @Column({
+        type: "enum",
+        enum: accessRole
+    }
+    )
+    role : accessRole;
 }
