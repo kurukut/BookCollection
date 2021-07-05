@@ -12,8 +12,8 @@ export class Author extends PersonInterface  {
     // @ManyToMany(type => Book, book => book.bookAuthors, {
     //     cascade: true
     // })
-    @ManyToMany(type => Book, book => book.bookAuthors)
-    @JoinTable()
-    books: Book[];
+    // @ManyToMany(type => Book, book => book.bookAuthors)
+    // @JoinTable()
+    // books: Book[];
     
 }

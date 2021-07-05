@@ -9,8 +9,9 @@ export class Book extends ContentInterface {
     @Column()
     bookCopies: number;
 
-    @ManyToMany(type => Author, author => author.books, {
-        cascade: true
+    @ManyToMany(type => Author,  {
+        cascade: true,
+        nullable:false
     })
     @JoinTable()
     bookAuthors: Author[];

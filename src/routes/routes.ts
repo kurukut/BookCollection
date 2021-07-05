@@ -1,5 +1,6 @@
-import {UserController} from "./controller/UserController";
-import {BookController} from "./controller/BookController";
+import {UserController} from "../controller/UserController";
+import {BookController} from "../controller/BookController";
+import { BookRepository } from "../repository/BookRepository";
 
 export const Routes = [{
     method: "get",
@@ -28,7 +29,7 @@ export const Routes = [{
     action: "all"
 }, {
     method: "get",
-    route: "/books/:bookName",
+    route: "/books/:id" ,
     controller: BookController,
     action: "one"
 }, {
@@ -38,9 +39,15 @@ export const Routes = [{
     action: "save"
 }, {
     method: "delete",
-    route: "/books/:bookId",
+    route: "/books/:id",
     controller: BookController,
     action: "remove"
+},
+{
+    method: "get",
+    route: "/booksname/:name",
+    controller: BookController,
+    action: "name"
 }
 
 ];

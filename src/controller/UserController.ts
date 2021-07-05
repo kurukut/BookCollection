@@ -1,26 +1,46 @@
-import {getRepository} from "typeorm";
-import {NextFunction, Request, Response} from "express";
+import {getCustomRepository, getRepository} from "typeorm";
+import {NextFunction, Request, Response, Router} from "express";
 import {User} from "../entity/User";
+import { UserRepository } from "../repository/UserRepository";
+import { UserService } from "../service/UserService";
 
 export class UserController {
 
-    private userRepository = getRepository(User);
-
-    async all(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.find();
+    private userService: UserService; 
+    constructor(){
+      this.userService = new UserService(); // Create a new instance of UserController
+    
     }
+  
+    public all = async (req: Request, res: Response) => {
+      const users = await this.userService.findAll();
+      res.send(users).json();
+    } 
+  
+    public one = async (req: Request, res: Response) => {
+        const users = await this.userService.findOne(req.params.id);
+        res.send(users).json();
+      }
 
-    async one(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.findOne(request.params.id);
+     
+    public create = async (req: Request, res: Response) => {
+      const user = req['body'] as User;
+      const newUser = await this.userService.create(user);
+      res.send(newUser);
     }
-
-    async save(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.save(request.body);
+  
+    public update = async (req: Request, res: Response) => {
+      const user = req['body'] as User;
+      const id =  req['params']['id'];
+      
+      res.send(this.userService.update(user, Number(id)));
     }
-
-    async remove(request: Request, response: Response, next: NextFunction) {
-        let userToRemove = await this.userRepository.findOne(request.params.id);
-        await this.userRepository.remove(userToRemove);
-    }
+  
+    public delete = async (req: Request, res: Response) => {
+      const id =  req['params']['id'];
+      res.send(this.userService.delete(Number(id)));
+    } 
+  
+    
 
 }
