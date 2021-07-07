@@ -1,38 +1,43 @@
-import { getConnection, getCustomRepository } from 'typeorm';
-import { Author } from '../entity/Author';
-import { AuthorRepository } from '../repository/AuthorRepository';
-
+import { getConnection, getCustomRepository } from "typeorm";
+import { Author } from "../entity/Author";
+import { AuthorRepository } from "../repository/AuthorRepository";
 
 export class AuthorService {
-  private bookRepository: AuthorRepository;
+  private authorRepository: AuthorRepository;
 
-  constructor(){
-    this.bookRepository = getCustomRepository(AuthorRepository);
+  constructor() {
+    this.authorRepository = getCustomRepository(AuthorRepository);
   }
 
   public findAll = async () => {
-    const books = await this.bookRepository.find(); 
-    return books;
-  } 
+    const authors = await this.authorRepository.find();
+    return authors;
+  };
 
-  public findOne = async (id:number) => {
-    const books = await this.bookRepository.findOne(id);
-    return books;
-  } 
-  
+  public findOne = async (id: number) => {
+    const authors = await this.authorRepository.findOne(id);
+    return authors;
+  };
+  public findByFirstName = async (firstName: string) => {
+    return this.authorRepository.findByFirstName(firstName);
+  };
 
-  public create = async (book: Author) => {
-    const newAuthor = await this.bookRepository.save(book);
+  public findByLastName = async (lastName: string) => {
+    return this.authorRepository.findByLastName(lastName);
+  };
+
+  public create = async (author: Author) => {
+    const newAuthor = await this.authorRepository.save(author);
     return newAuthor;
-  } 
+  };
 
-  public update =  async(book: Author, id: number) => {
-    const updatedAuthor = await this.bookRepository.update(id, book);
+  public update = async (author: Author, id: number) => {
+    const updatedAuthor = await this.authorRepository.update(id, author);
     return updatedAuthor;
-  } 
+  };
 
   public delete = async (id: number) => {
-    const deletedAuthor = await this.bookRepository.delete(id);
+    const deletedAuthor = await this.authorRepository.delete(id);
     return deletedAuthor;
-  } 
+  };
 }

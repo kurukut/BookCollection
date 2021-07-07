@@ -1,41 +1,51 @@
-import { getConnection, getCustomRepository } from 'typeorm';
-import { Book } from '../entity/Book';
-import { BookRepository } from '../repository/BookRepository';
-
+import { getConnection, getCustomRepository } from "typeorm";
+import { BOOK_NOT_FOUND } from "../constants/Constants";
+import { Book } from "../entity/Book";
+import { BookRepository } from "../repository/BookRepository";
 
 export class BookService {
   private bookRepository: BookRepository;
 
-  constructor(){
+  constructor() {
     this.bookRepository = getCustomRepository(BookRepository);
   }
 
   public findAll = async () => {
-    const books = await this.bookRepository.find(); 
-    return books;
-  } 
+    return this.bookRepository.find();
+  };
 
-  public findOne = async (id:number) => {
-    const books = await this.bookRepository.findOne(id);
-    return books;
-  } 
-  public findByName = async (name:string) => {
+  public findOne = async (id: number) => {
+    try {
+      return await this.bookRepository.findOneOrFail(id);
+    } catch (error) {
+      return BOOK_NOT_FOUND;
+    }
+  };
+  public findByName = async (name: string) => {
     const books = await this.bookRepository.findByName(name);
     return books;
-  } 
+  };
 
   public create = async (book: Book) => {
     const newBook = await this.bookRepository.save(book);
     return newBook;
-  } 
+  };
 
-  public update =  async(book: Book, id: number) => {
-    const updatedBook = await this.bookRepository.update(id, book);
-    return updatedBook;
-  } 
+  public update = async (book: Book, id: number) => {
+    try {
+      await this.findOne(id);
+    } catch (error) {
+      return BOOK_NOT_FOUND;
+    }
+    return this.bookRepository.update(id, book);
+  };
 
   public delete = async (id: number) => {
-    const deletedBook = await this.bookRepository.delete(id);
-    return deletedBook;
-  } 
+    try {
+      await this.findOne(id);
+    } catch (error) {
+      return BOOK_NOT_FOUND;
+    }
+    return this.bookRepository.delete(id);
+  };
 }

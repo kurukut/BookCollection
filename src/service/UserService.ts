@@ -1,39 +1,67 @@
-import { getConnection, getCustomRepository } from 'typeorm';
-import { User } from '../entity/User';
-import { UserRepository } from '../repository/UserRepository';
-
-
+import { validate } from "class-validator";
+import {
+  getConnection,
+  getConnectionManager,
+  getCustomRepository,
+} from "typeorm";
+import { USER_NOT_FOUND } from "../constants/Constants";
+import { User } from "../entity/User";
+import { UserRepository } from "../repository/UserRepository";
 
 export class UserService {
   private userRepository: UserRepository;
 
-  constructor(){
+  constructor() {
+    console.log(getConnectionManager().connections);
     this.userRepository = getCustomRepository(UserRepository);
   }
-
+  //functions are async coz I want to return a promise
   public findAll = async () => {
-    const users = await this.userRepository.find(); 
-    return users;
-  } 
+    return this.userRepository.find();
+  };
 
-  public findOne = async (id:number) => {
-    const users = await this.userRepository.findOne(id);
-    return users;
-  } 
-  
+  public findOne = async (id: number) => {
+    // return this.userRepository.findOneOrFail(id).catch((error) => {
+    //   return USER_NOT_FOUND;
+    // });
+
+    try {
+      return await this.userRepository.findOneOrFail(id);
+    } catch (error) {
+      return USER_NOT_FOUND;
+    }
+  };
+
+  /*
+  no need to use await coz there are no following lines of code
+  */
+  public findFirstName = async (firstName: string) => {
+    return this.userRepository.findByFirstName(firstName);
+  };
+
+  public findLastName = async (lastName: string) => {
+    return this.userRepository.findByLastName(lastName);
+  };
 
   public create = async (user: User) => {
-    const newUser = await this.userRepository.save(user);
-    return newUser;
-  } 
+    return this.userRepository.save(user);
+  };
 
-  public update =  async(user: User, id: number) => {
-    const updatedUser = await this.userRepository.update(id, user);
-    return updatedUser;
-  } 
+  public update = async (user: User, id: number) => {
+    try {
+      await this.findOne(id);
+    } catch (error) {
+      return USER_NOT_FOUND;
+    }
+    return this.userRepository.update(id, user);
+  };
 
   public delete = async (id: number) => {
-    const deletedUser = await this.userRepository.delete(id);
-    return deletedUser;
-  } 
+    try {
+      await this.findOne(id);
+    } catch (error) {
+      return USER_NOT_FOUND;
+    }
+    return this.userRepository.delete(id);
+  };
 }

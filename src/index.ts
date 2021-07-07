@@ -1,35 +1,47 @@
 import "reflect-metadata";
-import {createConnection} from "typeorm";
+import { createConnection, getConnectionManager } from "typeorm";
 import * as express from "express";
 import * as bodyParser from "body-parser";
-import {Request, Response} from "express";
-import {Routes} from "./routes/routes";
-import {User} from "./entity/User";
+import getRoutes from "./routes";
+import Routes from "./routes";
+import * as cors from "cors";
 
-createConnection().then(async connection => {
+// import {Request, Response} from "express";
+// import {Routes} from "./routes/routess";
+// import {User} from "./entity/User";
 
+createConnection()
+  .then(async (connection) => {
     // create express app
+    console.log("create connec");
     const app = express();
     app.use(bodyParser.json());
-    
-    //register express routes from defined application routes
-    Routes.forEach(route => {
-        (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
-            const result = (new (route.controller as any))[route.action](req, res, next);
-            if (result instanceof Promise) {
-                result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);
+    app.use(cors());
 
-            } else if (result !== null && result !== undefined) {
-                res.json(result);
-            }
-        });
-    });
+    //register express routes from defined application routes
+    // Routes.forEach(route => {
+    //     (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
+    //         const result = (new (route.controller as any))[route.action](req, res, next);
+    //         if (result instanceof Promise) {
+    //             result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);
+
+    //         } else if (result !== null && result !== undefined) {
+    //             res.json(result);
+    //         }
+    //     });
+    // });
 
     // setup express app here
     // ...
 
     // start express server
+    Routes(app);
     app.listen(3021);
+
+    console.log(
+      "Express server has started on port 3020. Open http://localhost:3020/users to see results"
+    );
+    //app.use("/", getRoutes());
 
     // insert new users for test
     // await connection.manager.save(connection.manager.create(User, {
@@ -42,7 +54,5 @@ createConnection().then(async connection => {
     //     lastName: "Assassin",
     //     age: 24
     // }));
-
-    console.log("Express server has started on port 3020. Open http://localhost:3020/users to see results");
-
-}).catch(error => console.log(error));
+  })
+  .catch((error) => console.log(error));
