@@ -1,10 +1,11 @@
-import { User } from "../entity/User";
+import { User } from "../../entity/User";
 
 import { validate } from "class-validator";
 
 import { NextFunction, Request, Response, Router } from "express";
-import { Name } from "../dao/Name";
-import { Contact } from "../dao/Contact";
+import { Name } from "../../dao/Name";
+import { Contact } from "../../dao/Contact";
+import { plainToClass } from "class-transformer";
 
 export const userValidations = async (
   req: Request,
@@ -12,11 +13,8 @@ export const userValidations = async (
   next: NextFunction
 ) => {
   const user = req["body"] as User;
-  let dummyUser = new User();
 
-  dummyUser = <User>user;
-  console.log(typeof dummyUser);
-  copyUserContents(user, dummyUser);
+  let dummyUser = plainToClass(User, user);
   const errors = await validate(dummyUser);
 
   if (errors.length > 0) {

@@ -1,18 +1,14 @@
-import { validate } from "class-validator";
-import {
-  getConnection,
-  getConnectionManager,
-  getCustomRepository,
-} from "typeorm";
-import { USER_NOT_FOUND } from "../constants/Constants";
+import { getCustomRepository } from "typeorm";
+
 import { User } from "../entity/User";
 import { UserRepository } from "../repository/UserRepository";
+import { plainToClass } from "class-transformer";
+import Constants from "../constants/Constants";
 
 export class UserService {
   private userRepository: UserRepository;
 
   constructor() {
-    console.log(getConnectionManager().connections);
     this.userRepository = getCustomRepository(UserRepository);
   }
   //functions are async coz I want to return a promise
@@ -28,7 +24,7 @@ export class UserService {
     try {
       return await this.userRepository.findOneOrFail(id);
     } catch (error) {
-      return USER_NOT_FOUND;
+      return error;
     }
   };
 
@@ -44,24 +40,30 @@ export class UserService {
   };
 
   public create = async (user: User) => {
-    return this.userRepository.save(user);
+    user = plainToClass(User, user);
+    user.hashPassword();
+    try {
+      return await this.userRepository.save(user);
+    } catch (error) {
+      return error;
+    }
   };
 
   public update = async (user: User, id: number) => {
     try {
       await this.findOne(id);
+      return this.userRepository.update(id, user);
     } catch (error) {
-      return USER_NOT_FOUND;
+      return error;
     }
-    return this.userRepository.update(id, user);
   };
 
   public delete = async (id: number) => {
     try {
       await this.findOne(id);
+      return this.userRepository.delete(id);
     } catch (error) {
-      return USER_NOT_FOUND;
+      return error;
     }
-    return this.userRepository.delete(id);
   };
 }

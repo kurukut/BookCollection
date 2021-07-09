@@ -1,16 +1,7 @@
 import { type } from "os";
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  JoinTable,
-  ManyToMany,
-} from "typeorm";
-import { Contact } from "../dao/Contact";
+import { Entity, Unique } from "typeorm";
 
 import { PersonInterface } from "../functionalinterfaces/PersonInterface";
-import { Book } from "./Book";
 
 @Entity()
 export class Author extends PersonInterface {}

@@ -1,3 +1,12 @@
+/*
+secret key for jwt
+*/
 export default {
   jwtSecret: "@QEGTUI",
 };
+
+/*
+Improvements
+=============
+generate the secret key in a more secure way
+ */

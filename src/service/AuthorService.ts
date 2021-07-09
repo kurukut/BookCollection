@@ -1,4 +1,5 @@
-import { getConnection, getCustomRepository } from "typeorm";
+import { getCustomRepository } from "typeorm";
+import Constants from "../constants/Constants";
 import { Author } from "../entity/Author";
 import { AuthorRepository } from "../repository/AuthorRepository";
 
@@ -15,8 +16,11 @@ export class AuthorService {
   };
 
   public findOne = async (id: number) => {
-    const authors = await this.authorRepository.findOne(id);
-    return authors;
+    try {
+      return await this.authorRepository.findOneOrFail(id);
+    } catch (error) {
+      return error;
+    }
   };
   public findByFirstName = async (firstName: string) => {
     return this.authorRepository.findByFirstName(firstName);
@@ -27,17 +31,28 @@ export class AuthorService {
   };
 
   public create = async (author: Author) => {
-    const newAuthor = await this.authorRepository.save(author);
-    return newAuthor;
+    try {
+      return await this.authorRepository.save(author);
+    } catch (error) {
+      return error;
+    }
   };
 
   public update = async (author: Author, id: number) => {
-    const updatedAuthor = await this.authorRepository.update(id, author);
-    return updatedAuthor;
+    try {
+      await this.findOne(id);
+    } catch (error) {
+      return error;
+    }
+    return this.authorRepository.update(id, author);
   };
 
   public delete = async (id: number) => {
-    const deletedAuthor = await this.authorRepository.delete(id);
-    return deletedAuthor;
+    try {
+      await this.findOne(id);
+    } catch (error) {
+      return error;
+    }
+    return this.authorRepository.delete(id);
   };
 }

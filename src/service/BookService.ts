@@ -1,5 +1,5 @@
 import { getConnection, getCustomRepository } from "typeorm";
-import { BOOK_NOT_FOUND } from "../constants/Constants";
+import Constants from "../constants/Constants";
 import { Book } from "../entity/Book";
 import { BookRepository } from "../repository/BookRepository";
 
@@ -18,7 +18,7 @@ export class BookService {
     try {
       return await this.bookRepository.findOneOrFail(id);
     } catch (error) {
-      return BOOK_NOT_FOUND;
+      return error;
     }
   };
   public findByName = async (name: string) => {
@@ -35,7 +35,7 @@ export class BookService {
     try {
       await this.findOne(id);
     } catch (error) {
-      return BOOK_NOT_FOUND;
+      return error;
     }
     return this.bookRepository.update(id, book);
   };
@@ -44,7 +44,7 @@ export class BookService {
     try {
       await this.findOne(id);
     } catch (error) {
-      return BOOK_NOT_FOUND;
+      return error;
     }
     return this.bookRepository.delete(id);
   };

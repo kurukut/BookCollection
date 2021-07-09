@@ -1,14 +1,13 @@
-import { PrimaryGeneratedColumn, Column } from "typeorm";
+import { PrimaryGeneratedColumn, Column, Unique, Index } from "typeorm";
 
 export abstract class ContentInterface {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @Column()
+  @Index({ unique: true })
+  name: string;
 
-    @Column()
-    name: string;
-
-    @Column()
-    description: string;
-
+  @Column()
+  description: string;
 }

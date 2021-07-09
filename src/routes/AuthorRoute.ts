@@ -1,14 +1,13 @@
-import { Router, Express } from "express";
-import { AuthorController } from "../controller/AuthorController";
-import { authorValidations } from "../middleware/authorValidations";
+import { Express } from "express";
+import AuthorController from "../controller/AuthorController";
+import { checkJwt } from "../middleware/jwt/checkJwt";
+import { checkRole } from "../middleware/jwt/checkRole";
+
+import { authorValidations } from "../middleware/validations/authorValidations";
 
 function getAuthorRouter(app: Express) {
-  //   const router = Router();
-  //   console.log("inside routes11");
   const authorController = new AuthorController();
 
-  //Get all authors
-  //, [checkJwt, checkRole(["ADMIN"])]
   app.get("/authors", authorController.all);
 
   //Get author by id
@@ -21,13 +20,25 @@ function getAuthorRouter(app: Express) {
   app.get("/authors/name/:lastName", authorController.lastName);
 
   //create a new author
-  app.post("/authors", [authorValidations], authorController.create);
+  app.post(
+    "/authors",
+    [authorValidations, checkJwt, checkRole(["ADMIN"])],
+    authorController.create
+  );
 
   //update an existing author
-  app.put("/authors/:id", [authorValidations], authorController.update);
+  app.put(
+    "/authors/:id",
+    [authorValidations, checkJwt, checkRole(["ADMIN"])],
+    authorController.update
+  );
 
   //delete an existing author
-  app.delete("/authors/:id", authorController.delete);
+  app.delete(
+    "/authors/:id",
+    [checkJwt, checkRole(["ADMIN"])],
+    authorController.delete
+  );
   //return router;
 }
 

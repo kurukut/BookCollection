@@ -1,3 +1,4 @@
+import { arrayNotEmpty, isNotEmpty, isNotEmptyObject } from "class-validator";
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -14,11 +15,12 @@ export class Book extends ContentInterface {
   @Column({ default: 1 })
   bookCopies: number;
 
-  
   @ManyToMany((type) => Author, {
     cascade: true,
     nullable: false,
+
   })
   @JoinTable()
+  @man
   bookAuthors: Author[];
 }

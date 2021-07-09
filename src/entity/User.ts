@@ -1,18 +1,13 @@
-import { Entity, Column, Unique } from "typeorm";
-import { NextFunction, Request, Response, Router } from "express";
+import { Entity, Column, Unique, Index } from "typeorm";
+
 import * as bcrypt from "bcryptjs";
 import { Length, IsNotEmpty } from "class-validator";
 import { PersonInterface } from "../functionalinterfaces/PersonInterface";
 import { accessRole } from "../roles/accessRole";
+import { Exclude, Expose } from "class-transformer";
 
 @Entity()
 export class User extends PersonInterface {
-  // constructor(user) {
-  //   super(user);
-  //   this.role = user.role;
-  //   this.username = user.username;
-  //   this.password = user.password;
-  // }
   @Column({
     type: "enum",
     enum: accessRole,
@@ -22,10 +17,10 @@ export class User extends PersonInterface {
 
   @Column()
   @Length(4, 20)
-  @Unique(["username"])
+  @Index({ unique: true })
   username: string;
 
-  @Column()
+  @Column({ select: false })
   @Length(4, 100)
   password: string;
 

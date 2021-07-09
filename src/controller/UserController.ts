@@ -1,50 +1,54 @@
-import { getCustomRepository, getRepository } from "typeorm";
-import { NextFunction, Request, Response, Router } from "express";
+import { isInstance } from "class-validator";
+import { Request, Response } from "express";
 import { User } from "../entity/User";
-import { UserRepository } from "../repository/UserRepository";
-import { UserService } from "../service/UserService";
 
-export class UserController {
+import { UserService } from "../service/UserService";
+import prepareResponse from "./helpers/PrepareResponse";
+
+export default class UserController {
   private userService: UserService;
   constructor() {
-    this.userService = new UserService(); // Create a new instance of UserController
+    this.userService = new UserService();
   }
 
   public all = async (req: Request, res: Response) => {
     const users = await this.userService.findAll();
-    res.send(users).json();
+    prepareResponse(users, res);
   };
 
   public one = async (req: Request, res: Response) => {
     const users = await this.userService.findOne(req.params.id);
-    res.send(users).json();
+
+    prepareResponse(users, res);
   };
 
   public allFirstName = async (req: Request, res: Response) => {
     const users = await this.userService.findFirstName(req.params.firstName);
-    res.send(users).json();
+    prepareResponse(users, res);
   };
 
   public allLastName = async (req: Request, res: Response) => {
     const users = await this.userService.findLastName(req.params.lastName);
-    res.send(users).json();
+    prepareResponse(users, res);
   };
 
   public create = async (req: Request, res: Response) => {
     const user = req["body"] as User;
     const newUser = await this.userService.create(user);
-    res.send(newUser);
+
+    prepareResponse(newUser, res);
   };
 
   public update = async (req: Request, res: Response) => {
     const user = req["body"] as User;
     const id = req["params"]["id"];
-    res.send(this.userService.update(user, Number(id)));
+    const newUser = await this.userService.update(user, Number(id));
+    prepareResponse(newUser, res);
   };
 
   public delete = async (req: Request, res: Response) => {
     const id = req["params"]["id"];
     const user = await this.userService.delete(Number(id));
-    res.send(user);
+    prepareResponse(user, res);
   };
 }
