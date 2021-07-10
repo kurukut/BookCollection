@@ -8,12 +8,13 @@ import { Exclude, Expose } from "class-transformer";
 
 @Entity()
 export class User extends PersonInterface {
-  @Column({
-    type: "enum",
-    enum: accessRole,
-  })
+  // @Column({
+  //   type: "enum",
+  //   enum: accessRole,
+  // })
+  @Column()
   @IsNotEmpty()
-  role: accessRole;
+  role: string;
 
   @Column()
   @Length(4, 20)

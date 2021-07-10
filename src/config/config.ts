@@ -6,7 +6,7 @@ export default {
 };
 
 /*
-Improvements
+TODO
 =============
 generate the secret key in a more secure way
  */

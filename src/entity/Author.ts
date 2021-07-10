@@ -1,4 +1,4 @@
-import { type } from "os";
+
 import { Entity, Unique } from "typeorm";
 
 import { PersonInterface } from "../functionalinterfaces/PersonInterface";

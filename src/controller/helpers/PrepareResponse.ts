@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 export default function prepareResponse(response, res: Response) {
-  if (response.code != "") {
+  if ("code" in response) {
     res.status(400).send(response);
     return;
   } else {

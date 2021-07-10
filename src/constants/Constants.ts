@@ -6,11 +6,11 @@ const enum Constants {
   CREDENTIALS_ABSENT = "Error : Credentials Absent",
   PHONE_ERROR = "Phone number must be a phone number",
   EMAIL_ERROR = "Email address must be an email address.",
-  NOT_AUTHORISED="User do not have permissions"
+  NOT_AUTHORISED = "User do not have permissions",
 }
 
 export default Constants;
 /*
-Improvement
-Implement error handlers
+TODO
+send the error codes in response
 */

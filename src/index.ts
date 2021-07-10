@@ -4,7 +4,8 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 
 import Routes from "./routes";
-import * as cors from "cors";
+
+
 
 createConnection()
   .then(async (connection) => {
@@ -12,7 +13,7 @@ createConnection()
     
     const app = express();
     app.use(bodyParser.json());
-    //app.use(cors());
+    
 
     Routes(app);
     app.listen(3021);
@@ -23,3 +24,4 @@ createConnection()
     
   })
   .catch((error) => console.log(error));
+ 
