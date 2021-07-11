@@ -187,8 +187,9 @@ docker exec -it mysql1 mysql -uroot -p
 
 ## 2. Run Book Management App
 
-1. npm start
-2. npm run migration:run # Add an admin user
+1. npm install
+2. npm start
+3. npm run migration:run # Add an admin user
 
 # Sample Json for postman
 
