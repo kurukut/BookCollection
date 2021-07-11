@@ -33,6 +33,79 @@
 8. an admin user can be created by running the migration after starting the server (npm start)
    npm run migration:run
 
+   The user table looks like this post migration
+
+   mysql> select \* from user;
+   +----+-----+-------+----------+--------------------------------------------------------------+-----------+----------+--------------+-----------------------+---------------------+
+   | id | age | role | username | password | nameFirst | nameLast | contactPhone | contactEmail | contactAddress |
+   +----+-----+-------+----------+--------------------------------------------------------------+-----------+----------+--------------+-----------------------+---------------------+
+   | 1 | 20 | ADMIN | admin | $2a$08$V7/5ACC2nhlgqyhC2iAlYOfclagjUjrABotNej7BtMg9yqEGC6Ese | Harry | Potter | 123456789 | HarryPotter@gmail.com | Privet Drive,London |
+   +----+-----+-------+----------+--------------------------------------------------------------+-----------+----------+--------------+-----------------------+---------------------+
+   1 row in set (0.00 sec)
+
+# database structure
+
+1. mysql> show tables;
+   +--------------------------+
+   | Tables_in_bookshelf |
+   +--------------------------+
+   | author |
+   | book |
+   | book_book_authors_author |
+   | user |
+   +--------------------------+
+   4 rows in set (0.00 sec)
+
+2. mysql> describe author;
+   +----------------+--------------+------+-----+---------+----------------+
+   | Field | Type | Null | Key | Default | Extra |
+   +----------------+--------------+------+-----+---------+----------------+
+   | id | int | NO | PRI | NULL | auto_increment |
+   | age | int | NO | | NULL | |
+   | nameFirst | varchar(255) | NO | | NULL | |
+   | nameLast | varchar(255) | NO | | NULL | |
+   | contactPhone | varchar(255) | NO | UNI | NULL | |
+   | contactEmail | varchar(255) | NO | UNI | NULL | |
+   | contactAddress | varchar(255) | NO | | NULL | |
+   +----------------+--------------+------+-----+---------+----------------+
+
+3. mysql> describe book;
+   +-------------+--------------+------+-----+---------+----------------+
+   | Field | Type | Null | Key | Default | Extra |
+   +-------------+--------------+------+-----+---------+----------------+
+   | id | int | NO | PRI | NULL | auto_increment |
+   | name | varchar(255) | NO | UNI | NULL | |
+   | description | varchar(255) | NO | | NULL | |
+   | bookCopies | int | NO | | 1 | |
+   +-------------+--------------+------+-----+---------+----------------+
+   4 rows in set (0.00 sec)
+
+4. mysql> describe book_book_authors_author ;
+   +----------+------+------+-----+---------+-------+
+   | Field | Type | Null | Key | Default | Extra |
+   +----------+------+------+-----+---------+-------+
+   | bookId | int | NO | PRI | NULL | |
+   | authorId | int | NO | PRI | NULL | |
+   +----------+------+------+-----+---------+-------+
+   2 rows in set (0.00 sec)
+
+5. mysql> describe user;
+   +----------------+--------------+------+-----+---------+----------------+
+   | Field | Type | Null | Key | Default | Extra |
+   +----------------+--------------+------+-----+---------+----------------+
+   | id | int | NO | PRI | NULL | auto_increment |
+   | age | int | NO | | NULL | |
+   | role | varchar(255) | NO | | NULL | |
+   | username | varchar(255) | NO | UNI | NULL | |
+   | password | varchar(255) | NO | | NULL | |
+   | nameFirst | varchar(255) | NO | | NULL | |
+   | nameLast | varchar(255) | NO | | NULL | |
+   | contactPhone | varchar(255) | NO | UNI | NULL | |
+   | contactEmail | varchar(255) | NO | UNI | NULL | |
+   | contactAddress | varchar(255) | NO | | NULL | |
+   +----------------+--------------+------+-----+---------+----------------+
+   10 rows in set (0.00 sec)
+
 # project structure
 
 .
