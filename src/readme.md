@@ -1,4 +1,4 @@
-# tools and framework used
+# Tools and framework used
 
 1. typeorm
    opensource
@@ -43,7 +43,7 @@
    +----+-----+-------+----------+--------------------------------------------------------------+-----------+----------+--------------+-----------------------+---------------------+
    1 row in set (0.00 sec)
 
-# database structure
+# Database structure
 
 1. mysql> show tables;
    +--------------------------+
@@ -106,7 +106,7 @@
    +----------------+--------------+------+-----+---------+----------------+
    10 rows in set (0.00 sec)
 
-# project structure
+# Project structure
 
 .
 ├── config
@@ -165,8 +165,30 @@
 
 # Instructions
 
+## 1. Prepare Database
+
+Run mysql in a docker container.
+
+```
+docker run --name mysql1 -p 3306:3306 \
+-e MYSQL_ROOT_PASSWORD=password \
+-e MYSQL_USER=bookshelf_user \
+-e MYSQL_ROOT_HOST='%' \
+-e MYSQL_PASSWORD=password \
+-e MYSQL_DATABASE=bookshelf \
+-d mysql/mysql-server:5.6
+```
+
+## 2. Start the database and initlize the table
+
+```
+docker exec -it mysql1 mysql -uroot -p
+```
+
+## 2. Run Book Management App
+
 1. npm start
-2. npm run migration:run
+2. npm run migration:run # Add an admin user
 
 # Sample Json for postman
 
