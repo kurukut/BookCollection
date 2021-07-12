@@ -1,31 +1,135 @@
+# Instructions
+
+## 1. Prepare Database
+
+Run mysql in a docker container.
+
+```
+docker run --name mysql1 -p 3306:3306 \
+-e MYSQL_ROOT_PASSWORD=password \
+-e MYSQL_USER=bookshelf_user \
+-e MYSQL_ROOT_HOST='%' \
+-e MYSQL_PASSWORD=password \
+-e MYSQL_DATABASE=bookshelf \
+-d mysql/mysql-server:5.6
+```
+
+## 2. Start the database and initlize the table
+
+```
+docker exec -it mysql1 mysql -uroot -p
+```
+
+## 2. Run Book Management App
+
+1. npm install
+2. npm start
+3. npm run migration:run # Add an admin user
+
+# Sample Json for postman
+
+1. Login
+
+```
+   {
+   "Username":"admin",
+   "Password":"admin"
+   }
+```
+
+2. Create User
+
+```
+   {
+   "name": {
+   "first": "Ron",
+   "last": "Weasley"
+   },
+   "contact": {
+   "phone": "8884695147",
+   "email": "ron@gmail.com",
+   "address": "ettukuzhi"
+   },
+   "age": 20,
+   "role": "ADMIN",
+   "username": "ronald",
+   "password": "ronald"
+   }
+```
+
+3. Create Author
+
+```
+   "name": {
+   "first": "sree",
+   "last": "vidya"
+   },
+   "contact": {
+   "phone": "8884695147",
+   "email": "vidya426@gmail.com",
+   "address": "ettukuzhi"
+   },
+   "age": 30
+   }
+```
+
+4. Create Book
+
+```
+   { "name":"harrypotter",
+   "description":"magic",
+   "bookCopies": 2,
+   "bookAuthors": [
+   {
+   "contact": {
+   "phone": "8884695147",
+   "email": "vidya426@gmail.com",
+   "address": "ettukuzhi"
+   },
+   "name": {
+   "first": "jk",
+   "last": "rowling"
+   },
+   "age": 30
+   }
+   ]
+   }
+```
+
 # Tools and framework used
 
 1. typeorm
+
    - opensource
    - powerful querybuilder
    - discussed well on stackoverflow,youtube tech channels
    - good documentation support
 
 2. database mysql
+
    - relational database pattern preferred due to the nature of the project
 
 3. testing
+
    - supertest/chai mocha
    - fast and reliable testing for apis
    - postman
 
 4. All the rest api endpoints are inside the routes folder.
+
    - src/routes/index.ts aggregates routes for Author,Book, User and Authentication.
    - Open the following files inside src/route to see the respective endpoints
-   - AuthenticationRouter.ts  
-   - AuthorRoute.ts  
+   - AuthenticationRouter.ts
+   - AuthorRoute.ts
    - BookRoute.ts
    - UserRoute.ts
 
 5. the apis are directed to the respective Controllers (src/Controller)
+
    - respective controllers take help of services (/src/service) and repositories (/src/repository) to resolve the logic.
 
 6. the entities are modelled in src/entity
+
    - Author.ts Book.ts User.ts
 
 7. src/middleware takes care of validations and jwt authentication and role based authorisation
@@ -36,7 +140,8 @@
 npm run migration:run
 ```
 
-   The user table looks like this post migration
+The user table looks like this post migration
+
 ```
    mysql> select \* from user;
    +----+-----+-------+----------+--------------------------------------------------------------+-----------+----------+--------------+-----------------------+---------------------+
@@ -169,98 +274,4 @@ npm run migration:run
 └── test=============================test cases are added here
 ├── TestFactory.ts
 └── UserTests.test.ts
-```
-
-# Instructions
-
-## 1. Prepare Database
-
-Run mysql in a docker container.
-
-```
-docker run --name mysql1 -p 3306:3306 \
--e MYSQL_ROOT_PASSWORD=password \
--e MYSQL_USER=bookshelf_user \
--e MYSQL_ROOT_HOST='%' \
--e MYSQL_PASSWORD=password \
--e MYSQL_DATABASE=bookshelf \
--d mysql/mysql-server:5.6
-```
-
-## 2. Start the database and initlize the table
-
-```
-docker exec -it mysql1 mysql -uroot -p
-```
-
-## 2. Run Book Management App
-
-1. npm install
-2. npm start
-3. npm run migration:run # Add an admin user
-
-# Sample Json for postman
-
-1. Login
-```
-   {
-   "Username":"admin",
-   "Password":"admin"
-   }
-```
-2. Create User
-
-```
-   {
-   "name": {
-   "first": "Ron",
-   "last": "Weasley"
-   },
-   "contact": {
-   "phone": "8884695147",
-   "email": "ron@gmail.com",
-   "address": "ettukuzhi"
-   },
-   "age": 20,
-   "role": "ADMIN",
-   "username": "ronald",
-   "password": "ronald"
-   }
-```
-
-3. Create Author
-```
-   "name": {
-   "first": "sree",
-   "last": "vidya"
-   },
-   "contact": {
-   "phone": "8884695147",
-   "email": "vidya426@gmail.com",
-   "address": "ettukuzhi"
-   },
-   "age": 30
-   }
-```
-
-4. Create Book
-```
-   { "name":"harrypotter",
-   "description":"magic",
-   "bookCopies": 2,
-   "bookAuthors": [
-   {
-   "contact": {
-   "phone": "8884695147",
-   "email": "vidya426@gmail.com",
-   "address": "ettukuzhi"
-   },
-   "name": {
-   "first": "jk",
-   "last": "rowling"
-   },
-   "age": 30
-   }
-   ]
-   }
 ```
