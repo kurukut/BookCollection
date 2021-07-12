@@ -115,6 +115,8 @@ docker exec -it mysql1 mysql -uroot -p
    - fast and reliable testing for apis
    - postman
 
+# Workflow
+
 4. All the rest api endpoints are inside the routes folder.
 
    - src/routes/index.ts aggregates routes for Author,Book, User and Authentication.
